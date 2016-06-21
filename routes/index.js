@@ -20,7 +20,7 @@ router.post('/', function(req, resp, next){
             if(err){
                 resp.send(err.message + '');
             }else{
-                resp.send('');
+                resp.send(res.insertId);
             }
             resp.end();
         });
