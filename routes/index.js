@@ -4,6 +4,8 @@ var findAction = require('../server/action/findAction');
 var getAction = require('../server/action/getAction');
 var saveAction = require('../server/action/saveAction');
 var updateAction = require('../server/action/updateAction');
+var uploadAction = require('../server/action/uploadAction');
+var formUtil = require('../server/util');
 
 var router = express.Router();
 
@@ -14,6 +16,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, resp, next){
+    console.log(req.body);
+    uploadAction.dealRequest(req, function(err, res){
+
+    });
     var action = req.body.action;
     if(action == 'save'){
         saveAction.dealRequest(req, function(err, res){
@@ -64,6 +70,11 @@ router.post('/', function(req, resp, next){
                 resp.send(JSON.stringify(res));
             }
             resp.end();
+        });
+    }
+    else if(action == 'upload'){
+        updateAction.dealRequest(req, function(err, res){
+
         });
     }
 });
