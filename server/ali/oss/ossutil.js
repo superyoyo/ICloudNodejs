@@ -7,8 +7,8 @@ var fs = require('fs');
 
 var client = new OSS({
     region : 'oss-cn-beijing',
-    accessKeyId : 'CcgN622fLiBcfWw1',
-    accessKeySecret : 'h4IesYay1FMXD04mGmqUqhv9jkchyp'
+    accessKeyId : '',
+    accessKeySecret : ''
 });
 
 /**
