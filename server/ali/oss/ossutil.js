@@ -7,8 +7,8 @@ var fs = require('fs');
 
 var client = new OSS({
     region : 'oss-cn-beijing',
-    accessKeyId : '',
-    accessKeySecret : ''
+    accessKeyId : 'CcgN622fLiBcfWw1',
+    accessKeySecret : 'h4IesYay1FMXD04mGmqUqhv9jkchyp'
 });
 
 /**
@@ -60,6 +60,7 @@ exports.uploadFile = function(bucketName, object_key, file_path, cb){
             object_key, stream, {contentLength: size});
         cb(result, undefined);
     }).catch(function (err) {
+        console.log(err);
         cb(undefined, err);
     });
 };

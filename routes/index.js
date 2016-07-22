@@ -5,7 +5,8 @@ var getAction = require('../server/action/getAction');
 var saveAction = require('../server/action/saveAction');
 var updateAction = require('../server/action/updateAction');
 var uploadAction = require('../server/action/uploadAction');
-var formUtil = require('../server/util');
+var formUtil = require('../server/util/formutil');
+var response_util = require('../server/util/response_util');
 
 var router = express.Router();
 
@@ -15,66 +16,64 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.post('/', function(req, resp, next){
-    console.log(req.body);
+router.post('/upload', function(req, resp, next){
     uploadAction.dealRequest(req, function(err, res){
-
+        console.log(res);
+        if(err){
+            response_util.dealResponse(1, err, '', resp);
+        }else{
+            response_util.dealResponse(0, '', res, resp);
+        }
     });
+});
+
+router.post('/', function(req, resp, next){
     var action = req.body.action;
     if(action == 'save'){
         saveAction.dealRequest(req, function(err, res){
             if(err){
-                resp.send(err.message + '');
+                response_util.dealResponse(1, err.message, '', resp);
             }else{
-                resp.send(res.insertId +'');
+                response_util.dealResponse(0, res.insertId, '', resp);
             }
-            resp.end();
         });
     }
     else if(action == 'delete'){
         deleteAction.dealRequest(req, function(err, res){
             if(err){
-                resp.send(err.message);
+                response_util.dealResponse(1, err.message, '', resp);
             }else{
                 console.log(res.affectedRows);
-                resp.send(res.affectedRows + '');
+                response_util.dealResponse(0, res.affectedRows, '', resp);
             }
-            resp.end();
         });
     }
     else if(action == 'update'){
         updateAction.dealRequest(req, function(err, res){
             if(err){
-                resp.send(err.message);
+                response_util.dealResponse(1, err.message, '', resp);
             }else{
-                resp.send(res.affectedRows + '');
+                console.log(res.affectedRows);
+                response_util.dealResponse(0, res.affectedRows, '', resp);
             }
-            resp.end();
         });
     }
     else if(action == 'get'){
         getAction.dealRequest(req, function(err, res){
             if(err){
-                resp.send(err.message);
+                response_util.dealResponse(1, err.message, '', resp);
             }else{
-                resp.send(JSON.stringify(res[0]));
+                response_util.dealResponse(0, '', JSON.stringify(res[0]), resp);
             }
-            resp.end();
         });
     }
     else if(action == 'find'){
         findAction.dealRequest(req, function(err, res){
             if(err){
-                resp.send(err.message);
-            }else{
-                resp.send(JSON.stringify(res));
-            }
-            resp.end();
-        });
-    }
-    else if(action == 'upload'){
-        updateAction.dealRequest(req, function(err, res){
 
+            }else{
+                response_util.dealResponse(0, '', JSON.stringify(res), resp);
+            }
         });
     }
 });

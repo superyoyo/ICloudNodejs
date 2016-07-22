@@ -10,30 +10,45 @@ exports.dealRequest = function(req, cb){
     var fields = [];
     form.uploadDir = '../server/files';
     var bucketName = '';
+    var fileName = '';
     form
         .on('field', function(field, value) {
-            console.log(field, value);
             fields.push([field, value]);
             if(field == 'bucketName'){
                 bucketName = value;
             }
+            if(field == 'name'){
+                fileName = value;
+            }
         })
         .on('file', function(field, file) {
-            console.log(field, file);
             files.push([field, file]);
         })
         .on('end', function() {
             console.log('-> upload done');
-            console.log(files);
-            console.log(fields);
-            /*for(var i in files){
-                var file = files[i];
-                var name = file[0];
-                var path = file[1].path;
-                oss.uploadFile(bucketName, file[0], path, function(result, err){
-                    console.log(result);
-                });
-            }*/
+            if(files.length > 0){
+                var file = files[0];
+                if(file[0] == 'photo'){
+                    file = file[1];
+                    if(fileName == ''){
+                        fileName = file.name;
+                    }
+                    var path = file.path;
+                    oss.uploadFile(bucketName, fileName, path, function(result, err){
+                        if(result.res.status == '200'){
+                            console.log(result.url);
+                            cb(err, result.url);
+                            console.log('cb执行完毕');
+                        }else{
+                            cb(err, undefined);
+                        }
+                    });
+                }else{
+                    cb( '参数不全', undefined);
+                }
+            }else{
+                cb( '参数不全', undefined);
+            }
         });
     form.parse(req);
 }

@@ -4,7 +4,7 @@
 var dbutil = require('../util/dbutil');
 var strutil = require('../util/stringUtil');
 
-exports.dealRequest = function(request, cb){
+exports.dealRequest = function(files, cb){
     var className = request.body.className;
     var data = request.body.data;
     var fileds = '';
